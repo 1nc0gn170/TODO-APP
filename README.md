@@ -1,3 +1,3 @@
 # TODO-LIST
 
-![My Note](App/Images/mynote.png)
+![My Note](Images/mynote.png)
