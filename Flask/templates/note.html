@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TODO NOTE</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style type="text/css">
+		body{
+			padding: 35px;
+		}
+		#title{
+			  border: 0;
+			  outline: 0;
+			  background: transparent;
+			  border-bottom: 1px solid black;
+			  width: 470px; height: 20px;
+
+		}
+		.clear{
+			margin-left: 40px;
+		}
+		.notes{
+			padding: 30px;
+			width: 550px;
+			height: 450px;
+			overflow-y: auto;
+			border: 1px solid black;
+			border-radius: 10px 10px 10px 10px;
+		}
+
+		.check:hover{
+			color: green;
+		}
+		.cross:hover{
+			color: red;
+		}
+		a {
+			color: black;
+		}
+	</style>
+</head>
+<body>
+	<center>
+		<h1>My Notes</h1>
+		<form action="/add" method="POST">
+			<input type="text" name="title" placeholder="Note" id="title" autocomplete="off">
+			<input type="submit" name="addNote" value="+ New Add Note" id="addNote" style="height: 26px;">
+		</form><br><br>
+
+		<div class="notes">
+
+				<div style="text-align: left;">
+					{% if notes %}
+						{% for note in notes%}
+							<div style="font-size: 22px;" id="note-{{ note.id }}">
+
+								<a href="/update/{{note.id}}/status/done"><span class="check"><i class="fa fa-check" aria-hidden="true"></i></span></a>
+								<a href="/update/{{note.id}}/status/remove"><span class="cross"><i class="fa fa-times" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+
+								{%if not note.complete%}
+									<span id="data"><b>{{note.note}}</b></i></span>
+								{%else%}
+									<span id="data" style="color: green"><del><b>{{note.note}}</b></del></span>
+								{%endif%}
+
+							</div>
+						{% endfor%}
+					{% endif %}
+				</div><br>
+
+		</div><br>
+
+		<div class="options">
+			<a href="/update/remove/completed"><input class="clear" type="submit"  value="Clear Completed Tasks" id="clearCompleted"></a>
+			<a href="/update/remove/all"><input type="submit"  value="Clear All" id="clearAll" class="clear"></a>
+		</div>
+	</center>
+
+
+</body>
+</html>
