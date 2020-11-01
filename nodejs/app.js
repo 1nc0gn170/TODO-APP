@@ -7,6 +7,9 @@ app.set('view engine', 'ejs');
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+
+
 var randId = () => {
 	var charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	var randstr = "";
@@ -17,6 +20,61 @@ var randId = () => {
 	}
 	return randstr;
 }
+
+//------------------------------API------------------------------------------------------------------
+
+app.get("/api/notes",(req,res,next) => {
+	db.query("SELECT * FROM mynotes;",(err,result,f) => {
+		if (err){throw err;}
+		res.send(JSON.stringify({"status":"success","error":null,"response":result}));
+	});
+
+})
+
+app.get("/api/notes/:id",(req,res,next) => {
+	db.query("SELECT * FROM mynotes WHERE id=?;",[req.params.id],(err,result,f) => {
+		if (err){throw err;}
+		res.send(JSON.stringify({"status":"success","error":null,"response":result}));
+	});
+
+})
+
+app.post("/api/notes",(req,res,next) => {
+	if (req.body.note){
+
+		data = {id:randId(),note :req.body.note,complete:0};
+		db.query("INSERT INTO mynotes SET ?;",data,(err,result,f) => {
+			if (err){throw err;}
+			res.send(JSON.stringify({"status":"success","error":null,"response":result}));
+		});
+	}
+
+})
+
+app.put("/api/notes/:id",(req,res,next) => {
+	if (req.body.note){
+
+		db.query("UPDATE mynotes SET note =? WHERE id=?;",[req.body.note,req.params.id],(err,result,f) => {
+			if (err){throw err;}
+			res.send(JSON.stringify({"status":"success","error":null,"response":result}));
+		});
+	}
+
+})
+
+app.delete("/api/notes/:id",(req,res,next) => {
+
+		
+	db.query("DELETE FROM mynotes WHERE id=?;",[req.params.id],(err,result,f) => {
+		if (err){throw err;}
+		res.send(JSON.stringify({"status":"success","error":null,"response":result}));
+	});
+
+
+})
+
+
+//--------------------------------------------------------------------------------------------------------
 
 app.get("/update/remove/completed",(req,res,next) => {
 	db.query("DELETE FROM mynotes WHERE complete =1;",(err,result,f) => {
